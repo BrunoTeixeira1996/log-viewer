@@ -25,7 +25,7 @@
 	      {{ range $target := .targets }}
 	      <tr>
 		<td>
-		  <a href="/target/">{{ $target.Name }} - {{ $target.Host }}</a>
+		  <a href="/target/{{ $target.Name }}">{{ $target.Name }} - {{ $target.Host }}</a>
 		</td>
 		<td>
 		  {{ if (ne $target.Status "available") }}
