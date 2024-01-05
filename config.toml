@@ -1,0 +1,11 @@
+[[targets]]
+name = "telegram-bot"
+host = "192.168.30.171"
+
+[[targets]]
+name = "gbackup"
+host = "192.168.30.171"
+
+[[targets]]
+name = "something"
+host = "192.168.30.170"
