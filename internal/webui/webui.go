@@ -40,7 +40,12 @@ func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: get request to http://ip:9292/log and display in web interface
-
+	if err := ui.tmpl.ExecuteTemplate(w, "target.html.tmpl", map[string]interface{}{
+		"something": "something",
+	}); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	return
 }
 
