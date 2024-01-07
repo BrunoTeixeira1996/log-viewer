@@ -7,3 +7,8 @@
 - [X] Check if target is alive when starting program
 - [X] Create target webui similar to gokrazy when viewing logs of a specific appliance
 - [ ] Perform request to `http://target_ip:9292/log` and display in web interface
+- [ ] Create auto-refresh in `/` and `/target/` and create flag to set a specific refresh time
+- [ ] Create README
+  - [ ] Create architecture in excalidraw
+- [ ] Create two releases (1 for exporter and 1 for viewer)
+- [ ] Change repo from private to public
