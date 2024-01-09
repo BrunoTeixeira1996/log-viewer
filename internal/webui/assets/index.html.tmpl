@@ -18,9 +18,8 @@
 
 	  <table class="table">
 	    <tbody><tr>
-		<th width="20%">target</th>
-		<th width="8%">status</th>
-		<th width="72%">last log line</th>
+		<th width="100%">target</th>
+		<th width="72%">status</th>
 	      </tr>
 	      {{ range $target := .targets }}
 	      <tr>
@@ -34,9 +33,6 @@
 		  {{ if (ne $target.Status "unavailable") }}
 		  <span class="label label-success">{{ $target.Status }}</span>
 		  {{ end }}
-		</td>
-		<td class="lastlog">
-		  <small>stderr: </small>2024/01/05 14:34:58 dhcp.go:299: waiting indefinitely for eth0 to appear<br/>
 		</td>
 	      </tr>
 	      {{ end }}
