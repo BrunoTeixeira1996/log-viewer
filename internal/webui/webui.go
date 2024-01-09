@@ -3,7 +3,7 @@ package webui
 import (
 	"embed"
 	"fmt"
-	"io"
+	"log-viewer/internal/requests"
 	"log-viewer/internal/target"
 	"net/http"
 	"strings"
@@ -41,35 +41,11 @@ func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Perform request to extract info from journalctl
-	req, err := http.NewRequest(http.MethodGet, "http://"+targetHost+":9292/log", nil)
+	// Performs request to extract info from journalctl
+	data, err := requests.GetJournalctlForTarget(targetHost, targetName)
 	if err != nil {
-		fmt.Printf("[ERROR] while creating new request: %s\n", err)
-		fmt.Fprintf(w, "[ERROR] while creating new request: %s\n", err)
+		fmt.Fprintf(w, "%s\n", err)
 		return
-	}
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		fmt.Printf("[ERROR] while making http request: %s\n", err)
-		fmt.Fprintf(w, "[ERROR] while making http request: %s\n", err)
-		return
-	}
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		fmt.Printf("[ERROR] while reading response body: %s\n", err)
-		fmt.Fprintf(w, "[ERROR] while reading response body: %s\n", err)
-		return
-	}
-
-	data := struct {
-		TargetHost string
-		TargetName string
-		Journalctl string
-	}{
-		TargetHost: targetHost,
-		TargetName: targetName,
-		Journalctl: strings.Replace(string(resBody), "\n", "<br>", -1),
 	}
 
 	if err := ui.tmpl.ExecuteTemplate(w, "target.html.tmpl", map[string]interface{}{
