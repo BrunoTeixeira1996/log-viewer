@@ -10,7 +10,9 @@
 - [X] If target is `unavailable` dont create anchor tag
 - [ ] Create auto-refresh in `/` and `/target/` and create flag to set a specific refresh time
 - [x] Create goroutine for pinging
+- [ ] Create goroutine to check from time to time if target is up
 - [ ] Create README
+  - Add requirements (sudo and nmap)
   - [ ] Create architecture in excalidraw
 - [ ] Create two releases (1 for exporter and 1 for viewer)
 - [ ] Change repo from private to public
