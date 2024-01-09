@@ -9,7 +9,7 @@
 - [X] Perform request to `http://target_ip:9292/log` and display in web interface
 - [X] If target is `unavailable` dont create anchor tag
 - [ ] Create auto-refresh in `/` and `/target/` and create flag to set a specific refresh time
-- [ ] Create goroutine for pinging
+- [x] Create goroutine for pinging
 - [ ] Create README
   - [ ] Create architecture in excalidraw
 - [ ] Create two releases (1 for exporter and 1 for viewer)
