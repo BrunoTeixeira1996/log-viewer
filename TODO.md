@@ -8,7 +8,7 @@
 - [X] Create target webui similar to gokrazy when viewing logs of a specific appliance
 - [X] Perform request to `http://target_ip:9292/log` and display in web interface
 - [X] If target is `unavailable` dont create anchor tag
-- [ ] Create auto-refresh in `/` and `/target/` and create flag to set a specific refresh time
+- [ ] Create auto-refresh in `/` and `/target/`
 - [x] Create goroutine for pinging
 - [ ] Create goroutine to check from time to time if target is up
 - [ ] Create README
