@@ -3,6 +3,7 @@ package webui
 import (
 	"embed"
 	"fmt"
+	"io"
 	"log-viewer/internal/target"
 	"net/http"
 	"strings"
@@ -24,6 +25,7 @@ func (ui *UI) indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
+	// Verifies if target exist in order to not go to /target/asdasdasd
 	var targetHost string
 	targetName := strings.TrimPrefix(r.URL.Path, "/target/")
 
@@ -39,11 +41,42 @@ func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: get request to http://ip:9292/log and display in web interface
+	// Perform request to extract info from journalctl
+	req, err := http.NewRequest(http.MethodGet, "http://"+targetHost+":9292/log", nil)
+	if err != nil {
+		fmt.Printf("[ERROR] while creating new request: %s\n", err)
+		fmt.Fprintf(w, "[ERROR] while creating new request: %s\n", err)
+		return
+	}
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Printf("[ERROR] while making http request: %s\n", err)
+		fmt.Fprintf(w, "[ERROR] while making http request: %s\n", err)
+		return
+	}
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Printf("[ERROR] while reading response body: %s\n", err)
+		fmt.Fprintf(w, "[ERROR] while reading response body: %s\n", err)
+		return
+	}
+
+	data := struct {
+		TargetHost string
+		TargetName string
+		Journalctl string
+	}{
+		TargetHost: targetHost,
+		TargetName: targetName,
+		Journalctl: strings.Replace(string(resBody), "\n", "<br>", -1),
+	}
+
 	if err := ui.tmpl.ExecuteTemplate(w, "target.html.tmpl", map[string]interface{}{
-		"something": "something",
+		"data": data,
 	}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		fmt.Printf("[ERROR] while executing template: %s\n", err)
+		fmt.Fprintf(w, "[ERROR] while executing template: %s\n", err)
 		return
 	}
 	return
