@@ -4,7 +4,7 @@ host = "192.168.30.90"
 
 [[targets]]
 name = "gbackup"
-host = "192.168.30.171"
+host = "192.168.30.3"
 
 [[targets]]
 name = "something"
