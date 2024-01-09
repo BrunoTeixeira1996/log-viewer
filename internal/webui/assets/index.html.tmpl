@@ -24,13 +24,16 @@
 	      {{ range $target := .targets }}
 	      <tr>
 		<td>
+		  {{ if (ne $target.Status "available") }}
+		  <p>{{ $target.Name }} - {{ $target.Host }}</p>
+		  {{ else }}
 		  <a href="/target/{{ $target.Name }}">{{ $target.Name }} - {{ $target.Host }}</a>
+		  {{ end }}
 		</td>
 		<td>
 		  {{ if (ne $target.Status "available") }}
 		  <span class="label label-danger">{{ $target.Status }}</span>
-		  {{ end }}
-		  {{ if (ne $target.Status "unavailable") }}
+		  {{ else }}
 		  <span class="label label-success">{{ $target.Status }}</span>
 		  {{ end }}
 		</td>
