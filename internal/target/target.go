@@ -1,7 +1,6 @@
 package target
 
 import (
-	"fmt"
 	"os/exec"
 	"strings"
 )
@@ -12,18 +11,15 @@ type Target struct {
 	Status string
 }
 
-func (t *Target) IsAlive(ip string) error {
-	out, err := exec.Command("ping", ip, "-c 2").Output()
+func (t *Target) IsListening(ip string) {
+	out, err := exec.Command("nmap", "-p", "9292", ip).Output()
 	if err != nil {
 		t.Status = "unavailable"
-		return fmt.Errorf("Could not ping that IP: %v", err)
 	}
 
-	if strings.Contains(string(out), "Destination Host Unreachable") {
-		t.Status = "unavailable"
-		return fmt.Errorf("Destination Host Unreachable")
-	} else {
+	if strings.Contains(string(out), "open") {
 		t.Status = "available"
-		return nil
+	} else {
+		t.Status = "unavailable"
 	}
 }

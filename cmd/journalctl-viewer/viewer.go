@@ -7,6 +7,7 @@ import (
 	"log-viewer/internal/config"
 	"log-viewer/internal/target"
 	"log-viewer/internal/webui"
+	"sync"
 
 	"github.com/jinzhu/copier"
 )
@@ -38,12 +39,19 @@ func run() error {
 	// Copies config target to target.Target (object displayed in webui)
 	targets := &[]target.Target{}
 	copier.Copy(&targets, &cfg.Targets)
+
+	var wg sync.WaitGroup
+	wg.Add(len(*targets))
 	for i, t := range *targets {
-		if err := t.IsAlive(t.Host); err != nil {
-			log.Printf("Error while checking if IP is alive %s %v", t.Host, err)
-		}
-		(*targets)[i] = t
+		go func(i int, t target.Target) {
+			t.IsListening(t.Host)
+			log.Printf("Target %s is %s\n", t.Host, t.Status)
+			(*targets)[i] = t
+			wg.Done()
+		}(i, t)
+
 	}
+	wg.Wait()
 
 	if err := webui.Init(*targets); err != nil {
 		log.Fatal(err)
