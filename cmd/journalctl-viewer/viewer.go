@@ -45,7 +45,7 @@ func run() error {
 	for i, t := range *targets {
 		go func(i int, t target.Target) {
 			t.IsListening(t.Host)
-			log.Printf("Target %s is %s\n", t.Host, t.Status)
+			log.Printf("Target %s (%s) is %s\n", t.Name, t.Host, t.Status)
 			(*targets)[i] = t
 			wg.Done()
 		}(i, t)
