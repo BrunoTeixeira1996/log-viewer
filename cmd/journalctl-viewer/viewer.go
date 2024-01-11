@@ -7,7 +7,9 @@ import (
 	"log-viewer/internal/config"
 	"log-viewer/internal/target"
 	"log-viewer/internal/webui"
+	"strconv"
 	"sync"
+	"time"
 
 	"github.com/jinzhu/copier"
 )
@@ -20,16 +22,35 @@ import (
    Runs in gokrazy so I can go to gokrazy:9191 and view all logs
 */
 
+// Goroutine that check if target is still listening
+func isTargetStillListening(targets *[]target.Target, timeToCheckListening int) {
+	for {
+		log.Printf("After %d minutes, Ill check if targets are still listening ...\n", timeToCheckListening)
+		time.Sleep(time.Duration(timeToCheckListening) * time.Minute)
+
+		for i, t := range *targets {
+			t.IsListening(t.Host)
+			(*targets)[i] = t
+		}
+	}
+}
+
 func run() error {
 	var (
-		cfg          config.Config
-		tomlPathFlag = flag.String("toml-file", "", "path to toml file")
-		err          error
+		cfg                  config.Config
+		tomlPathFlag         = flag.String("toml-file", "", "path to toml file")
+		isStillListeningFlag = flag.String("check-time", "", "time to see if target is still listening")
+		timeToCheckListening int
+		err                  error
 	)
 	flag.Parse()
 
 	if *tomlPathFlag == "" {
 		return fmt.Errorf("[ERROR] toml-file flag is empty")
+	}
+
+	if timeToCheckListening, err = strconv.Atoi(*isStillListeningFlag); err != nil {
+		return fmt.Errorf("[ERROR] please provide an int type for check-time flag")
 	}
 
 	if cfg, err = config.ReadTomlFile(*tomlPathFlag); err != nil {
@@ -52,6 +73,8 @@ func run() error {
 
 	}
 	wg.Wait()
+
+	go isTargetStillListening(targets, timeToCheckListening)
 
 	if err := webui.Init(*targets); err != nil {
 		log.Fatal(err)
