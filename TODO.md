@@ -11,7 +11,7 @@
 - [X] Create auto-refresh in `/` and `/target/`
 - [X] Create goroutine for pinging
 - [X] Create goroutine to check from time to time if target is up
-- [ ] Create README
+- [X] Create README
   - Add requirements (sudo and nmap)
   - [ ] Add example for gokrazy
 - [ ] Create two releases (1 for exporter and 1 for viewer)
