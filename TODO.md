@@ -13,6 +13,6 @@
 - [X] Create goroutine to check from time to time if target is up
 - [ ] Create README
   - Add requirements (sudo and nmap)
-  - [ ] Create architecture in excalidraw
+  - [ ] Add example for gokrazy
 - [ ] Create two releases (1 for exporter and 1 for viewer)
 - [ ] Change repo from private to public
