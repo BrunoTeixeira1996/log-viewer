@@ -4,12 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"log-viewer/internal/config"
-	"log-viewer/internal/target"
-	"log-viewer/internal/webui"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/BrunoTeixeira1996/log-viewer/internal/config"
+	"github.com/BrunoTeixeira1996/log-viewer/internal/target"
+	"github.com/BrunoTeixeira1996/log-viewer/internal/webui"
 
 	"github.com/jinzhu/copier"
 )

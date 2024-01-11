@@ -3,11 +3,12 @@ package webui
 import (
 	"embed"
 	"fmt"
-	"log-viewer/internal/requests"
-	"log-viewer/internal/target"
 	"net/http"
 	"strings"
 	"text/template"
+
+	"github.com/BrunoTeixeira1996/log-viewer/internal/requests"
+	"github.com/BrunoTeixeira1996/log-viewer/internal/target"
 )
 
 type UI struct {
