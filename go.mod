@@ -1,4 +1,4 @@
-module log-viewer
+module github.com/BrunoTeixeira1996/log-viewer
 
 go 1.21.3
 
