@@ -1,14 +1,10 @@
 package target
 
 import (
-	"context"
-	"fmt"
 	"log"
+	"net"
 	"os/exec"
 	"strings"
-	"time"
-
-	"github.com/Ullaakut/nmap/v3"
 )
 
 type Target struct {
@@ -18,33 +14,14 @@ type Target struct {
 }
 
 func nmapForGokrazy(ip string) (bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
-	defer cancel()
-
-	scanner, err := nmap.NewScanner(ctx, nmap.WithTargets(ip), nmap.WithPorts("9292"))
-
+	_, err := net.Dial("tcp", ip+":9292")
+	// Is not up nor listening on port 9292
 	if err != nil {
-		return false, fmt.Errorf("[ERROR] unable to create nmap scanner: %v", err)
-	}
-
-	result, _, err := scanner.Run()
-	if err != nil {
-		return false, fmt.Errorf("[ERROR] unable to run nmap scan: %v", err)
-	}
-
-	// Check if Host is up
-	if result.Stats.Hosts.Up == 0 {
-		return false, nil
-	}
-
-	// Check if port 9292 is open
-	for _, port := range result.Hosts[0].Ports {
-		if port.ID == 9292 {
-			return true, nil
+		if strings.Contains(err.Error(), "connect") {
+			return false, nil
 		}
 	}
-
-	return false, nil
+	return true, nil
 }
 
 func (t *Target) IsListening(ip string, isGokrazy bool) {
