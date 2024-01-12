@@ -3,6 +3,7 @@ package webui
 import (
 	"embed"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"text/template"
@@ -62,7 +63,7 @@ func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
 //go:embed assets/*
 var assetsDir embed.FS
 
-func Init(targets []target.Target) error {
+func Init(targets []target.Target, listenPort string) error {
 	tmpl, err := template.ParseFS(assetsDir, "assets/*.tmpl")
 	if err != nil {
 		return err
@@ -78,7 +79,9 @@ func Init(targets []target.Target) error {
 	mux.HandleFunc("/", ui.indexHandler)
 	mux.HandleFunc("/target/", ui.targetHandler)
 
-	err = http.ListenAndServe(":8080", mux)
+	log.Printf("Listening at :%s\n", listenPort)
+
+	err = http.ListenAndServe(":"+listenPort, mux)
 	if err != nil && err != http.ErrServerClosed {
 		panic("Error trying to start http server: " + err.Error())
 	}

@@ -39,12 +39,17 @@ func isTargetStillListening(targets *[]target.Target, timeToCheckListening int) 
 func run() error {
 	var (
 		cfg                  config.Config
+		listenPortFlag       = flag.String("listen-port", "9696", "listening port (default is 9696)")
 		tomlPathFlag         = flag.String("toml-file", "", "path to toml file")
 		isStillListeningFlag = flag.String("check-time", "", "time to see if target is still listening")
 		timeToCheckListening int
 		err                  error
 	)
 	flag.Parse()
+
+	if _, err = strconv.Atoi(*listenPortFlag); err != nil {
+		return fmt.Errorf("[ERROR] please provide a valid listen-port flag")
+	}
 
 	if *tomlPathFlag == "" {
 		return fmt.Errorf("[ERROR] toml-file flag is empty")
@@ -77,7 +82,7 @@ func run() error {
 
 	go isTargetStillListening(targets, timeToCheckListening)
 
-	if err := webui.Init(*targets); err != nil {
+	if err := webui.Init(*targets, *listenPortFlag); err != nil {
 		log.Fatal(err)
 	}
 
