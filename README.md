@@ -17,7 +17,7 @@ With that, this utility aims to have two parts, an `exporter` and a `viewer`. Th
 
 - Go to the centralized server (in my case I use gokrazy) and download the `journalctl-viewer` binary from this repository
 - Create a `config.toml` file and add your targets (you can follow the example `config.toml` file inside this repository)
-- Then execute the binary like the following `./journalctl-viewer -toml-file <config.toml> -check-time <timer to check if targets are still listening>`
+- Then execute the binary like the following `./journalctl-viewer -toml-file <config.toml> -check-time <timer to check if targets are still listening> -listen-port 9898`
 - Note that you need `sudo` and `nmap` installed in the viewer server
 
 # Screenshots
