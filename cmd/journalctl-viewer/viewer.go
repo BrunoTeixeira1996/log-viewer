@@ -24,13 +24,13 @@ import (
 */
 
 // Goroutine that check if target is still listening
-func isTargetStillListening(targets *[]target.Target, timeToCheckListening int, isGokrazy bool) {
+func isTargetStillListening(targets *[]target.Target, timeToCheckListening int) {
 	for {
 		log.Printf("After %d minutes, Ill check if targets are still listening ...\n", timeToCheckListening)
 		time.Sleep(time.Duration(timeToCheckListening) * time.Minute)
 
 		for i, t := range *targets {
-			t.IsListening(t.Host, isGokrazy)
+			t.IsListening(t.Host)
 			log.Printf("Target %s (%s) is %s\n", t.Name, t.Host, t.Status)
 			(*targets)[i] = t
 		}
@@ -43,7 +43,6 @@ func run() error {
 		listenPortFlag       = flag.String("listen-port", "9696", "listening port (default is 9696)")
 		tomlPathFlag         = flag.String("toml-file", "", "path to toml file")
 		isStillListeningFlag = flag.String("check-time", "", "time to see if target is still listening")
-		isGokrazyFlag        = flag.Bool("gokrazy", false, "if set it means it will run in a gokrazy instance")
 		timeToCheckListening int
 		err                  error
 	)
@@ -73,7 +72,7 @@ func run() error {
 	wg.Add(len(*targets))
 	for i, t := range *targets {
 		go func(i int, t target.Target) {
-			t.IsListening(t.Host, *isGokrazyFlag)
+			t.IsListening(t.Host)
 			log.Printf("Target %s (%s) is %s\n", t.Name, t.Host, t.Status)
 			(*targets)[i] = t
 			wg.Done()
@@ -82,7 +81,7 @@ func run() error {
 	}
 	wg.Wait()
 
-	go isTargetStillListening(targets, timeToCheckListening, *isGokrazyFlag)
+	go isTargetStillListening(targets, timeToCheckListening)
 
 	if err := webui.Init(*targets, *listenPortFlag); err != nil {
 		log.Fatal(err)
