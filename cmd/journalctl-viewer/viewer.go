@@ -31,6 +31,7 @@ func isTargetStillListening(targets *[]target.Target, timeToCheckListening int) 
 
 		for i, t := range *targets {
 			t.IsListening(t.Host)
+			log.Printf("Target %s (%s) is %s\n", t.Name, t.Host, t.Status)
 			(*targets)[i] = t
 		}
 	}
