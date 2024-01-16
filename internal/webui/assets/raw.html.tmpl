@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw</title>
+  </head>
+  <body>
+    <pre id="log-container"></pre>
+
+    <script>
+      function fetchLog() {
+	  var xhr = new XMLHttpRequest();
+	  xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+		  updateLog(xhr.responseText);
+              }
+	  };
+	  
+	  // Append a timestamp to the log file URL
+	  var logFileUrl = 'http://{{ .targetData }}:9292/log?' + new Date().getTime();
+	  
+	  xhr.open('GET', logFileUrl, true);
+	  xhr.send();
+      }
+
+      function updateLog(logData) {
+	  var logContainer = document.getElementById('log-container');
+	  // Use innerHTML instead of textContent
+	  logContainer.innerHTML = logData;
+      }
+
+      // Fetch log initially
+      fetchLog();
+
+      // Periodically fetch log every 2 seconds
+      setInterval(fetchLog, 2000);
+    </script>
+  </body>
+</html>
