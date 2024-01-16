@@ -13,7 +13,7 @@
 - [X] Create goroutine to check from time to time if target is up
 - [X] Create README
   - Add requirements (sudo and nmap)
-  - [ ] Add example for gokrazy
+  - [X] Add example for gokrazy
 - [X] Clean code when doing nmap
 - [ ] Create two releases (1 for exporter and 1 for viewer)
 - [ ] Change repo from private to public
