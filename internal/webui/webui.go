@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"reflect"
 	"strings"
 	"text/template"
 
@@ -44,15 +43,13 @@ func (ui *UI) rawHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Performs request to extract info from journalctl in raw
-	data, err := requests.GetJournalctlForTarget(targetHost, targetName)
-	if err != nil {
-		fmt.Fprintf(w, "%s\n", err)
+	if err := ui.tmpl.ExecuteTemplate(w, "raw.html.tmpl", map[string]interface{}{
+		"targetData": targetName,
+	}); err != nil {
+		fmt.Printf("[ERROR] while executing raw template: %s\n", err)
+		fmt.Fprintf(w, "[ERROR] while executing raw template: %s\n", err)
 		return
 	}
-	// This extracts Journalctl field from interface
-	requestValue := reflect.ValueOf(data)
-	fmt.Fprintf(w, "%s\n", strings.Replace(requestValue.FieldByName("Journalctl").String(), "<br>", "\n", -1))
 
 	return
 }
