@@ -19,5 +19,6 @@
 - [X] Create two releases (1 for exporter and 1 for viewer)
 - [X] Add the feature to insta verify if target is avaiable
   - This could be done by sending a POST request to the `viewer`
+- [ ] Add raw journalctl to `viewer`
 - [ ] Add multiple exporters in one server
   - A config file should be used because in some servers there are multiple scripts being run
