@@ -44,7 +44,7 @@ func (ui *UI) rawHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := ui.tmpl.ExecuteTemplate(w, "raw.html.tmpl", map[string]interface{}{
-		"targetData": targetName,
+		"targetData": targetHost,
 	}); err != nil {
 		fmt.Printf("[ERROR] while executing raw template: %s\n", err)
 		fmt.Fprintf(w, "[ERROR] while executing raw template: %s\n", err)
