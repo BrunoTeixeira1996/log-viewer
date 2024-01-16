@@ -14,6 +14,6 @@
 - [X] Create README
   - Add requirements (sudo and nmap)
   - [ ] Add example for gokrazy
-- [ ] Clean code when doing nmap
+- [X] Clean code when doing nmap
 - [ ] Create two releases (1 for exporter and 1 for viewer)
 - [ ] Change repo from private to public
