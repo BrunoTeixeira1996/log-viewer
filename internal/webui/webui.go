@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reflect"
 	"strings"
 	"text/template"
 
@@ -24,6 +25,36 @@ func (ui *UI) indexHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (ui *UI) rawHandler(w http.ResponseWriter, r *http.Request) {
+	// Verifies if target exist in order to not go to /raw/<target>
+	var targetHost string
+	targetName := strings.TrimPrefix(r.URL.Path, "/raw/")
+
+	for _, t := range ui.targets {
+		if t.Name == targetName {
+			targetHost = t.Host
+			break
+		}
+	}
+
+	if targetHost == "" {
+		fmt.Fprintf(w, "Target does not exist")
+		return
+	}
+
+	// Performs request to extract info from journalctl in raw
+	data, err := requests.GetJournalctlForTarget(targetHost, targetName)
+	if err != nil {
+		fmt.Fprintf(w, "%s\n", err)
+		return
+	}
+	// This extracts Journalctl field from interface
+	requestValue := reflect.ValueOf(data)
+	fmt.Fprintf(w, "%s\n", strings.Replace(requestValue.FieldByName("Journalctl").String(), "<br>", "\n", -1))
+
+	return
 }
 
 func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
@@ -102,6 +133,7 @@ func Init(targets []target.Target, listenPort string) error {
 	mux.HandleFunc("/", ui.indexHandler)
 	mux.HandleFunc("/target/", ui.targetHandler)
 	mux.HandleFunc("/status/", ui.statusHandle)
+	mux.HandleFunc("/raw/", ui.rawHandler)
 
 	log.Printf("Listening at :%s\n", listenPort)
 
