@@ -16,4 +16,4 @@
   - [X] Add example for gokrazy
 - [X] Clean code when doing nmap
 - [X] Change repo from private to public
-- [ ] Create two releases (1 for exporter and 1 for viewer)
+- [X] Create two releases (1 for exporter and 1 for viewer)
