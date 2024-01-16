@@ -20,6 +20,28 @@ With that, this utility aims to have two parts, an `exporter` and a `viewer`. Th
 - Then execute the binary like the following `./journalctl-viewer -toml-file <config.toml> -check-time <timer to check if targets are still listening> -listen-port 9898`
 - Note that you need `sudo` and `nmap` installed in the viewer server
 
+## Gokrazy
+
+- Add `journalctl-viewer` to gokrazy with `gok add github.com/BrunoTeixeira1996/log-viewer/cmd/journalctl-viewer` inside your gokrazy appliance
+- Create a folder inside your gokrazy appliance with the name `log-viewer` and place your `config.toml` inside
+- Add the following extra configuration in the gokrazy `config.json` inside the `PackageConfig`
+
+``` json
+"github.com/BrunoTeixeira1996/log-viewer/cmd/journalctl-viewer": {
+	"CommandLineFlags": [
+		"-toml-file=/etc/log-viewer/config.toml",
+        "-check-time=180",
+        "-listen-port=9898"
+		],
+    "ExtraFilePaths": {
+		"/etc/log-viewer/config.toml": "/root/gokrazy/brun0-pi/log-viewer/config.toml"
+    }
+}
+```
+
+- Deploy the new `config.json` to gokrazy using `gok -i <your instance> update`
+
+
 # Screenshots
 
 ![image](https://github.com/BrunoTeixeira1996/log-viewer/assets/12052283/6cd8e30e-6a84-4c4a-9509-127e9fb68ace)
