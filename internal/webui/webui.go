@@ -60,6 +60,30 @@ func (ui *UI) targetHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Handles GET to view targets status on demand
+func (ui *UI) statusHandle(w http.ResponseWriter, r *http.Request) {
+	var res string
+
+	defer r.Body.Close()
+	if r.Method != "GET" {
+		http.Error(w, "NOT GET!", http.StatusBadRequest)
+		return
+	}
+
+	// FIXME: I want to know the origin of the request
+	log.Printf("GET request to check if targets are available on demand\n")
+	for i, t := range ui.targets {
+		t.IsListening(t.Host)
+		(*&ui.targets)[i] = t
+		if t.Status == "available" {
+			res += "Target " + t.Name + " is avaiable\n"
+		}
+	}
+
+	fmt.Fprintf(w, res)
+	return
+}
+
 //go:embed assets/*
 var assetsDir embed.FS
 
@@ -78,6 +102,7 @@ func Init(targets []target.Target, listenPort string) error {
 	mux.Handle("/assets/", http.FileServer(http.FS(assetsDir)))
 	mux.HandleFunc("/", ui.indexHandler)
 	mux.HandleFunc("/target/", ui.targetHandler)
+	mux.HandleFunc("/status/", ui.statusHandle)
 
 	log.Printf("Listening at :%s\n", listenPort)
 
