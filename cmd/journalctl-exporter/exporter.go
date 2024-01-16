@@ -22,6 +22,16 @@ type HandlerData struct {
 // Handles "/log"
 func (h *HandlerData) logHandle(w http.ResponseWriter, r *http.Request) {
 	cmd, err := exec.Command("sudo", "journalctl", "-b", "-u", h.service, "-o", "short-precise").Output()
+
+	// Enable CORS for all origins (use more restrictive settings in production)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	} else {
