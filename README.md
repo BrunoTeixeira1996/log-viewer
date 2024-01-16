@@ -30,8 +30,8 @@ With that, this utility aims to have two parts, an `exporter` and a `viewer`. Th
 "github.com/BrunoTeixeira1996/log-viewer/cmd/journalctl-viewer": {
 	"CommandLineFlags": [
 		"-toml-file=/etc/log-viewer/config.toml",
-        "-check-time=180",
-        "-listen-port=9898"
+		"-check-time=180",
+		"-listen-port=9898"
 		],
     "ExtraFilePaths": {
 		"/etc/log-viewer/config.toml": "/root/gokrazy/brun0-pi/log-viewer/config.toml"
