@@ -17,7 +17,7 @@
 - [X] Clean code when doing nmap
 - [X] Change repo from private to public
 - [X] Create two releases (1 for exporter and 1 for viewer)
-- [ ] Add the feature to insta verify if target is avaiable
+- [X] Add the feature to insta verify if target is avaiable
   - This could be done by sending a POST request to the `viewer`
 - [ ] Add multiple exporters in one server
   - A config file should be used because in some servers there are multiple scripts being run

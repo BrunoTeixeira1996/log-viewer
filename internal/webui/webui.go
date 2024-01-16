@@ -70,8 +70,7 @@ func (ui *UI) statusHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// FIXME: I want to know the origin of the request
-	log.Printf("GET request to check if targets are available on demand\n")
+	log.Printf("GET request from %s to check if targets are available on demand\n", r.RemoteAddr)
 	for i, t := range ui.targets {
 		t.IsListening(t.Host)
 		(*&ui.targets)[i] = t
