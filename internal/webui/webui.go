@@ -43,15 +43,6 @@ func (ui *UI) rawHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Enable CORS for all origins (use more restrictive settings in production)
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	w.Header().Set("Content-Type", "text/event-stream")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Connection", "keep-alive")
-
 	if err := ui.tmpl.ExecuteTemplate(w, "raw.html.tmpl", map[string]interface{}{
 		"targetData": targetHost,
 	}); err != nil {
